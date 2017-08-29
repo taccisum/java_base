@@ -2,6 +2,7 @@ package cn.tac.test.base;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author : tac
@@ -22,5 +23,9 @@ public class BaseTest {
 
     protected void divider() {
         System.out.println("----------------------------------------");
+    }
+
+    protected String randomUUIDStr() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }
