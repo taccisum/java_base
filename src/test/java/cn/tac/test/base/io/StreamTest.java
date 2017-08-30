@@ -15,4 +15,10 @@ public class StreamTest extends BaseIOTest {
         InputStream is = Class.class.getResourceAsStream("/assets/hello.txt");
         print(is);
     }
+
+    @Test
+    public void testGBK() throws IOException {
+        InputStream is = Class.class.getResourceAsStream("/assets/gbk.txt");
+        print(is, "gbk");
+    }
 }

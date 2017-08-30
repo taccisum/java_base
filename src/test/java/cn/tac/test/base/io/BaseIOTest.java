@@ -12,18 +12,32 @@ public class BaseIOTest extends BaseTest {
     protected void print(File file) throws IOException {
         System.out.println(read(file));
     }
+    protected void print(File file, String charsetName) throws IOException {
+        System.out.println(read(file, charsetName));
+    }
 
     protected void print(InputStream is) throws IOException {
         System.out.println(read(is));
     }
 
+    protected void print(InputStream is, String charsetName) throws IOException {
+        System.out.println(read(is, charsetName));
+    }
+
     protected String read(File file) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        return read(file, "utf-8");
+    }
+    protected String read(File file, String charsetName) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
         return doRead(br);
     }
 
     protected String read(InputStream is) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+       return read(is, "utf-8");
+    }
+
+    protected String read(InputStream is, String charsetName) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, charsetName));
         return doRead(br);
     }
 
