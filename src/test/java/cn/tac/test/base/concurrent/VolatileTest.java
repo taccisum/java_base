@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class VolatileTest {
     /**
-     * Try to run test case below with either volatile or non-volatile field 'flag'
+     * [See here]!!! Try to run test case below with either volatile or non-volatile field 'flag'
      */
 //    private static boolean flag = false;        // With non-volatile flag, the while loop could not be stopped
     private static volatile boolean flag = false;     // With volatile flag, the while loop will be stopped around 3s passing
