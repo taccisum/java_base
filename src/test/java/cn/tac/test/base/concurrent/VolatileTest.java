@@ -1,53 +1,44 @@
 package cn.tac.test.base.concurrent;
 
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 /**
+ * This example is for showing usage of the modifier 'volatile'
+ *
  * @author tac
  * @since 02/12/2017
  */
 public class VolatileTest {
-    private static int count;
-    private static int count1;
-
-    @Before
-    public void setUp() throws Exception {
-        count = 0;
-        count1 = 0;
-    }
+    /**
+     * Try to run test case below with either volatile or non-volatile field 'flag'
+     */
+//    private static boolean flag = false;        // With non-volatile flag, the while loop could not be stopped
+    private static volatile boolean flag = false;     // With volatile flag, the while loop will be stopped around 3s passing
 
     @Test
-    public void testSimply() throws InterruptedException {
-        ThreadPoolExecutor tp = new ThreadPoolExecutor(
-                10,
-                10,
-                30,
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(100));
-        for (int i = 0; i < 100; i++) {
-            tp.execute(() -> {
-                for (int j = 0; j < 200; j++) {
-                    count++;
-                    synchronized (this){
-                        count1++;
-                    }
+    public void testWhileLoop() throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            while (!flag) {
+                // Spin forever if flag is not being true
+                if (flag) {
+                    System.out.println("[t1] flag: " + flag + ". Break the while loop.");
                 }
-            });
-        }
+            }
+        });
 
-        tp.shutdown();
+        Thread t2 = new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+                System.out.println("[t2] Setup flag value as true.");
+                flag = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
-        tp.awaitTermination(1, TimeUnit.DAYS);
-
-        System.out.println(count);
-        System.out.println(count1);
-        Assert.assertNotEquals(20000, count);
-        Assert.assertEquals(20000, count1);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
     }
 }
